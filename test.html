@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div style="text-align: center; background-color: bisque; width: 500px; height: 500px;margin: 0 auto; border-radius: 5px; padding: 100px;">
+        <h1>Find Student</h1>
+        <input type="text" id="inputFind">
+        <button id="btn-search" onclick="searchBtn()">Search</button>
+        <div id="resultName" style="position: relative; top: 40px; font-size: 30px;"></div>
+        <button id="addBtn" style="position: relative; top: 140px;" onclick="addStudent()">Add</button>
+        <button id="deleteBtn" style="position: relative; top: 140px;" onclick="deleteStudent()">Delete</button>
+        <h2 style="position: relative; top: 140px;">Student login Now :</h2>
+        <div id="resultStorage" style="position: relative; top: 140px;color: greenyellow;"></div>
+    </div>
+
+    <script>
+        var names = [];
+
+       function getTaskFromStorage(){
+        var retrievedData = localStorage.getItem("names");
+        if (retrievedData){
+            names = JSON.parse(retrievedData)
+            document.getElementById("resultStorage").innerText = names.join(', ');
+        }
+       }
+
+        function searchBtn() {
+            var values = document.getElementById("inputFind").value.toLowerCase();
+
+            if (names.includes(values)) {
+                document.getElementById("resultName").innerHTML = `<span style="color: green;"> ${values} </span> is in the school`;
+            } else {
+                document.getElementById("resultName").innerHTML = `${values}<span style="color: red;"> NOT </span> founded`;
+            }
+        }
+
+        function addStudent() {
+            var values = document.getElementById("inputFind").value.toLowerCase();
+            if (values.trim() !== "") {
+                if (!names.includes(values)) {
+                    names.push(values);
+                    document.getElementById("resultStorage").innerText = names.join(', ');
+                    storage();
+                } else {
+                    document.getElementById("resultName").innerHTML = `"Student already<span style="color: green;"> exists!" </span>`;
+                }
+            } else {
+                alert("Please enter a valid name!");
+            }
+        }
+
+        function deleteStudent() {
+            var values = document.getElementById("inputFind").value.toLowerCase();
+            var index = names.indexOf(values);
+            if (index !== -1) {
+                names.splice(index, 1);
+                document.getElementById("resultStorage").innerText = names.join(', ');
+                storage();
+            } else {
+                alert("Enter the name you want to delete");
+            }
+        }
+
+        function storage() {
+            localStorage.setItem("names", JSON.stringify(names));
+        }
+
+        getTaskFromStorage();
+    </script>
+</body>
+</html>
